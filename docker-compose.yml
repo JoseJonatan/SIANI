@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  siani-service:
+    build:
+      context: ./siani-service
+      dockerfile: Dockerfile
+      args:
+        - profile=dev
+    image: siani-service:1.0.0
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./siani-service:/usr/src/app
+
+  db-postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_PASSWORD: techno
+  
+  email-service:
+    build:
+      context: ./email-service
+      dockerfile: Dockerfile
+      args:
+        - profile=dev
+    image: email-service:1.0.0
+    ports: 
+      - "8004:8004"
+
+volumes:
+  postgresql-data:
